@@ -27,7 +27,7 @@ class DriverLicenseUpdateForm(forms.ModelForm):
 
 
 class DriverCreateForm(UserCreationForm):
-    license_number = forms.CharField(max_length=8, required=True)
+    license_number = forms.CharField(max_length=8, required=True, min_length=1)
 
     class Meta(UserCreationForm.Meta):
         model = Driver
@@ -35,8 +35,6 @@ class DriverCreateForm(UserCreationForm):
 
     def clean_license_number(self):
         license_number = self.cleaned_data["license_number"]
-        if not license_number:
-            raise forms.ValidationError("License number is required.")
         if not validate_license_number(license_number):
             raise forms.ValidationError("License number is invalid.")
         return license_number
